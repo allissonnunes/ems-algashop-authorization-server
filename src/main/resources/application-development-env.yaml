@@ -1,3 +1,49 @@
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 server:
   port: 8081
 
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        client:
+          algashop-test-client:
+            registration:
+              client-id: algashop-test-client
+              client-secret: "{noop}secret2"
+              authorization-grant-types:
+                - client_credentials
+              client-authentication-methods:
+                - client_secret_basic
+              scopes:
+                - products:read
+                - products:write
+                - products:stock:write
+                - categories:read
+                - categories:write
+
+                - invoices:read
+                - invoices:write
+                - credit-cards:read
+                - credit-cards:write
+
+                - orders:read
+                - orders:write
+                - customers:read
+                - customers:write
+                - shopping-carts:read
+                - shopping-carts:write
+                - shipping-costs:preview
+          algashop-ordering-service-client:
+            registration:
+              client-id: algashop-ordering-service
+              client-secret: "{noop}secret1"
+              authorization-grant-types:
+                - client_credentials
+              client-authentication-methods:
+                - client_secret_basic
+              scopes:
+                - products:read
