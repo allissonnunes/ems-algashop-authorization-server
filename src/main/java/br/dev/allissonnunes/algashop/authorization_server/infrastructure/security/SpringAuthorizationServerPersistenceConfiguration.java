@@ -1,0 +1,31 @@
+package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+
+@Configuration
+class SpringAuthorizationServerPersistenceConfiguration {
+
+    @Bean
+    OAuth2AuthorizationService oAuth2AuthorizationService(
+            final JdbcTemplate jdbcTemplate,
+            final RegisteredClientRepository registeredClientRepository
+    ) {
+        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+    }
+
+    @Bean
+    OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService(
+            final JdbcTemplate jdbcTemplate,
+            final RegisteredClientRepository registeredClientRepository
+    ) {
+        return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
+    }
+
+}
