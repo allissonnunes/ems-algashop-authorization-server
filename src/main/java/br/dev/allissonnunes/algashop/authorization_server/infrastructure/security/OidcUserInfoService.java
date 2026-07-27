@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,7 @@ class OidcUserInfoService {
 
     private final AuthUserRepository authUserRepository;
 
-    public @NonNull OidcUserInfo getOidcUserInfo(final @NonNull String username) {
+    @NonNull OidcUserInfo getOidcUserInfo(final @NonNull String username) {
         final AuthUser loggedUser = this.authUserRepository.findByEmail(username)
                 .orElseThrow(() -> UsernameNotFoundException.fromUsername(username));
 
@@ -24,7 +23,7 @@ class OidcUserInfoService {
                 .name(loggedUser.getName())
                 .preferredUsername(loggedUser.getEmail())
                 .subject(loggedUser.getId().toString())
-                .claim(StandardClaimNames.UPDATED_AT, loggedUser.getLastModifiedAt().getEpochSecond())
+                .updatedAt(loggedUser.getLastModifiedAt().toString())
                 .build();
     }
 
