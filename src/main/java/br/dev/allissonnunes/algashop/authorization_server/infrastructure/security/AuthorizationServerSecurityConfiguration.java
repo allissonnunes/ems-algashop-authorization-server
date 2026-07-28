@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.server.authorization.oidc.web.authentication.OidcLogoutAuthenticationSuccessHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -23,14 +24,19 @@ class AuthorizationServerSecurityConfiguration {
 
     private final OidcUserInfoMapper oidcUserInfoMapper;
 
+    private final OidcLogoutAuthenticationSuccessHandler oidcLogoutAuthenticationSuccessHandler;
+
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(final HttpSecurity http) {
         http.oauth2AuthorizationServer(authorizationServer -> {
             http.securityMatcher(authorizationServer.getEndpointsMatcher());
             authorizationServer.oidc(oidcConfigurer -> oidcConfigurer
-                    .userInfoEndpoint(userInfoEndpointCustomizer ->
-                            userInfoEndpointCustomizer.userInfoMapper(this.oidcUserInfoMapper)));
+                    .userInfoEndpoint(userInfoEndpointCustomizer -> userInfoEndpointCustomizer
+                            .userInfoMapper(this.oidcUserInfoMapper))
+                    .logoutEndpoint(logoutEndpointCustomizer -> logoutEndpointCustomizer
+                            .logoutResponseHandler(oidcLogoutAuthenticationSuccessHandler))
+            );
         });
         http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
         http.oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()));
