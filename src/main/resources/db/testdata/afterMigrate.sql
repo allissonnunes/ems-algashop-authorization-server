@@ -3,6 +3,14 @@ session_replication_role = 'replica';
 
 DELETE
 FROM auth_user;
+DELETE
+FROM oauth2_authorization;
+DELETE
+FROM oauth2_authorization_consent;
+DELETE
+FROM spring_session_attributes;
+DELETE
+FROM spring_session;
 
 INSERT INTO auth_user (id,
                        email,
