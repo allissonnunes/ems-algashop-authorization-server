@@ -1,4 +1,4 @@
-package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security;
+package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.oidc;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

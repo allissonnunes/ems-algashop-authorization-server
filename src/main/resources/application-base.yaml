@@ -18,6 +18,9 @@ management:
           - health
           - info
 
+info:
+  app.name: AlgaShop Authorization Server
+
 spring:
   application:
     name: authorization-server

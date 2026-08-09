@@ -1,4 +1,4 @@
-package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security;
+package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.oidc;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-class OidcUserInfoMapper implements Function<OidcUserInfoAuthenticationContext, OidcUserInfo> {
+public class OidcUserInfoMapper implements Function<OidcUserInfoAuthenticationContext, OidcUserInfo> {
 
     @Override
     public OidcUserInfo apply(final OidcUserInfoAuthenticationContext context) {

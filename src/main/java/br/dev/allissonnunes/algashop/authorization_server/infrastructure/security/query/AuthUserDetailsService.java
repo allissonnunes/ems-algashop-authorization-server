@@ -1,7 +1,7 @@
-package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security;
+package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.query;
 
-import br.dev.allissonnunes.algashop.authorization_server.domain.model.AuthUser;
-import br.dev.allissonnunes.algashop.authorization_server.domain.model.AuthUserRepository;
+import br.dev.allissonnunes.algashop.authorization_server.domain.model.user.AuthUser;
+import br.dev.allissonnunes.algashop.authorization_server.domain.model.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.User;

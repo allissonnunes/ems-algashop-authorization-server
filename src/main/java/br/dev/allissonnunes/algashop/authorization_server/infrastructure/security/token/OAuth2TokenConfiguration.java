@@ -1,5 +1,6 @@
-package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security;
+package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.token;
 
+import br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.oidc.OidcUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

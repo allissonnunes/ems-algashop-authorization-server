@@ -47,6 +47,9 @@ spring:
                 - shopping-carts:read
                 - shopping-carts:write
                 - shipping-costs:preview
+
+                - users:read
+                - users:write
           algashop-ordering-service-client:
             registration:
               client-id: algashop-ordering-service
