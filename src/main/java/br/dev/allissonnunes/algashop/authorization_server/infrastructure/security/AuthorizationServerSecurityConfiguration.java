@@ -2,6 +2,7 @@ package br.dev.allissonnunes.algashop.authorization_server.infrastructure.securi
 
 import br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.oidc.OidcUserInfoMapper;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.health.actuate.endpoint.HealthEndpoint;
 import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
@@ -64,10 +65,7 @@ class AuthorizationServerSecurityConfiguration {
     @Order(2)
     SecurityFilterChain apiSecurityFilterChain(final HttpSecurity http) {
         http.securityMatcher("/api/**");
-        http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
-                .anyRequest().authenticated()
-        );
+        http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -78,7 +76,10 @@ class AuthorizationServerSecurityConfiguration {
     @Bean
     @Order(3)
     SecurityFilterChain defaultSecurityFilterChain(final HttpSecurity http) {
-        http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
+                .anyRequest().authenticated()
+        );
         http.formLogin(withDefaults());
         return http.build();
     }
@@ -88,7 +89,7 @@ class AuthorizationServerSecurityConfiguration {
         return new DefaultOAuth2AuthorizationManagerFactory<>();
     }
 
-    private RequestMatcher createRequestMatcher() {
+    private @NonNull RequestMatcher createRequestMatcher() {
         MediaTypeRequestMatcher requestMatcher = new MediaTypeRequestMatcher(MediaType.TEXT_HTML);
         requestMatcher.setIgnoredMediaTypes(Set.of(MediaType.ALL));
         return requestMatcher;
