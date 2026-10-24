@@ -19,6 +19,7 @@ spring:
   security:
     oauth2:
       authorizationserver:
+        issuer: http://auth.algashop.local:8081
         client:
           algashop-test-client:
             registration:
@@ -71,10 +72,10 @@ spring:
               client-authentication-methods:
                 - client_secret_basic
               redirect-uris:
-                - http://algashop-ecommerce:9080/login/oauth2/code/algashop-ecommerce-web
+                - http://algashop.local:9080/login/oauth2/code/algashop-ecommerce-web
                 - https://oauth.pstmn.io/v1/callback
               post-logout-redirect-uris:
-                - http://algashop-ecommerce:9080/logoutCallback
+                - http://algashop.local:9080/logoutCallback
               scopes:
                 - openid
                 - credit-cards:read
@@ -107,5 +108,49 @@ spring:
                 - customers:write
             token:
               access-token-time-to-live: 15m
+          algashop-admin-web-client:
+            registration:
+              client-id: algashop-admin-web
+              client-name: AlgaShop Admin
+              authorization-grant-types:
+                - authorization_code
+              client-authentication-methods:
+                - none # Client público sem autenticação
+              redirect-uris:
+                - http://admin.algashop.local:4200
+                - http://admin.algashop.local:4200/silent-refresh.html
+                - https://oauth.pstmn.io/v1/callback
+              post-logout-redirect-uris:
+                - http://admin.algashop.local:4200
+              scopes:
+                - products:read
+                - products:write
+                - products:stock:write
+                - categories:read
+                - categories:write
+                - invoices:read
+                - orders:read
+                - customers:read
+                - shopping-carts:read
+                - users:read
+                - users:write
+                - openid
+            require-authorization-consent: true
+            require-proof-key: true #PKCE
+            token:
+              access-token-time-to-live: 5m
+              authorization-code-time-to-live: 2m
   session:
     store-type: jdbc
+
+algashop:
+  security:
+    cors:
+      allowed-origins:
+        - http://admin.algashop.local:4200
+    cookie:
+      secure: false
+      same-site: Lax # Lax(include subdomain), Strict(only strict domain), None(any domain)
+      domain-name: algashop.local
+    csp:
+      policy-directives: "default-src 'self'; frame-ancestors 'self' http://admin.algashop.local:4200 http://auth.algashop.local:8081;"

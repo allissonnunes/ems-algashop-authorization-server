@@ -38,6 +38,8 @@ class AuthorizationServerSecurityConfiguration {
 
     private final OidcLogoutAuthenticationSuccessHandler oidcLogoutAuthenticationSuccessHandler;
 
+    private final AlgaShopSecurityProperties properties;
+
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(final HttpSecurity http) {
@@ -51,13 +53,19 @@ class AuthorizationServerSecurityConfiguration {
             );
         });
         http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
-        http.oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()));
+        http.cors(withDefaults());
         http.exceptionHandling((exceptions) ->
                 exceptions.defaultAuthenticationEntryPointFor(
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         this.createRequestMatcher()
                 )
         );
+        http.headers(headers -> {
+            headers.xssProtection(withDefaults());
+            headers.contentSecurityPolicy(cspPolicy -> cspPolicy
+                    .policyDirectives(this.properties.getCsp().getPolicyDirectives()));
+        });
+        http.oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()));
         return http.build();
     }
 
@@ -67,7 +75,7 @@ class AuthorizationServerSecurityConfiguration {
         http.securityMatcher("/api/**");
         http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
+        http.cors(withDefaults());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(withDefaults()));
         return http.build();
