@@ -9,7 +9,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.UUID;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElseGet;
 
 @Service
 @Slf4j
@@ -23,8 +27,8 @@ public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckA
 
         final Jwt jwt = getJwt();
         try {
-            return UUID.fromString(jwt.getSubject());
-        } catch (final IllegalArgumentException e) {
+            return UUID.fromString(requireNonNull(jwt.getSubject()));
+        } catch (final IllegalArgumentException | NullPointerException e) {
             log.error("Invalid user ID in JWT: {}", jwt.getSubject(), e);
             throw new AccessDeniedException("Invalid user ID", e);
         }
@@ -49,7 +53,8 @@ public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckA
             log.warn("Failed to get JWT", e);
             return false;
         }
-        return jwt.getAudience().contains(jwt.getSubject());
+        return requireNonNullElseGet(jwt.getAudience(), Collections::emptyList)
+                .contains(jwt.getSubject());
     }
 
     @Override
