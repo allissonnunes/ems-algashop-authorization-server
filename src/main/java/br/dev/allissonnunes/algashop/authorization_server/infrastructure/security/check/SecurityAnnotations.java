@@ -28,7 +28,7 @@ public interface SecurityAnnotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Inherited
     @Documented
-    @PreAuthorize("@OAuth2SecurityCheckApplicationServiceImpl.canAccessOwnProfile()")
+    @PreAuthorize("@securityCheck.canAccessOwnProfile()")
     @interface CanAccessOwnProfile {
 
     }

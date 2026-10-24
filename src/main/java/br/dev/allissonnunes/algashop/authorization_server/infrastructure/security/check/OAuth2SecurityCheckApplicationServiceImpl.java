@@ -15,7 +15,7 @@ import java.util.UUID;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElseGet;
 
-@Service
+@Service("securityCheck")
 @Slf4j
 public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckApplicationService {
 
