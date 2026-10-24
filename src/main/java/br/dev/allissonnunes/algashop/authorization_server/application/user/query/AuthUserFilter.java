@@ -8,8 +8,8 @@ public record AuthUserFilter(
         AuthUserType type,
         int page,
         int size,
-        String sort,
-        Sort.Direction direction
+        String sortByProperty,
+        Sort.Direction sortDirection
 ) {
 
 }

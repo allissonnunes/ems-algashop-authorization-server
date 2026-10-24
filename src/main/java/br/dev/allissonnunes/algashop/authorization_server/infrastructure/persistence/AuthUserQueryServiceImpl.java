@@ -100,9 +100,9 @@ public class AuthUserQueryServiceImpl implements AuthUserQueryService {
     }
 
     private Order toSortOrder(final CriteriaBuilder builder, final Root<AuthUser> root, final AuthUserFilter filter) {
-        return filter.direction().isAscending()
-                ? builder.asc(root.get(filter.sort()))
-                : builder.desc(root.get(filter.sort()));
+        return filter.sortDirection().isAscending()
+                ? builder.asc(root.get(filter.sortByProperty()))
+                : builder.desc(root.get(filter.sortByProperty()));
     }
 
 }
