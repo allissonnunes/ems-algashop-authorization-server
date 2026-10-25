@@ -1,2 +1,16 @@
 server:
   port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://algashop-postgres:5432/authorization_server
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+  flyway:
+    locations: classpath:db/migration
+    url: jdbc:postgresql://algashop-postgres:5432/authorization_server
+    user: postgres
+    password: postgres

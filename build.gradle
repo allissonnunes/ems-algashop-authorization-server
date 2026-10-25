@@ -58,3 +58,15 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register('dockerBuild', Exec) {
+    description = 'Builds a multi-platform Docker image using Buildx'
+    group = 'build'
+    dependsOn('bootJar')
+    workingDir project.rootDir
+    commandLine 'docker', 'buildx', 'build',
+            '--build-arg', "JAR_NAME=${bootJar.archiveFileName.get()}",
+            '--platform', 'linux/arm64/v8,linux/amd64',
+            '--tag', "algashop/${project.name}:dev",
+            '.'
+}
