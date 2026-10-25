@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OidcUserInfoService {
 
+    public static final String USER_CLAIM_TYPE = "type";
+
     private final AuthUserRepository authUserRepository;
 
     public @NonNull OidcUserInfo getOidcUserInfo(final @NonNull String username) {
@@ -23,6 +25,7 @@ public class OidcUserInfoService {
                 .name(loggedUser.getName())
                 .preferredUsername(loggedUser.getEmail())
                 .subject(loggedUser.getId().toString())
+                .claim(USER_CLAIM_TYPE, loggedUser.getType().name())
                 .updatedAt(loggedUser.getLastModifiedAt().toString())
                 .build();
     }
