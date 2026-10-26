@@ -1,8 +1,10 @@
 package br.dev.allissonnunes.algashop.authorization_server.infrastructure.security.check;
 
 import br.dev.allissonnunes.algashop.authorization_server.application.security.SecurityCheckApplicationService;
+import br.dev.allissonnunes.algashop.authorization_server.domain.model.user.AuthUserType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -10,6 +12,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -60,6 +63,19 @@ public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckA
     @Override
     public boolean canAccessOwnProfile() {
         return this.isAuthenticated() && !this.isMachineAuthentication();
+    }
+
+    @Override
+    public boolean canRegisterUserOfType(final AuthUserType type, final MethodSecurityExpressionOperations operations) {
+        if (AuthUserType.CUSTOMER.equals(type)) {
+            return isMachineAuthentication();
+        }
+
+        if (Set.of(AuthUserType.MANAGER, AuthUserType.OPERATOR).contains(type)) {
+            return operations.hasRole("MANAGER");
+        }
+
+        return false;
     }
 
     private Authentication getAuthentication() {

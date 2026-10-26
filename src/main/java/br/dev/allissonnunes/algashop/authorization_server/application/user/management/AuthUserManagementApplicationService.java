@@ -7,6 +7,7 @@ import br.dev.allissonnunes.algashop.authorization_server.domain.model.user.Auth
 import br.dev.allissonnunes.algashop.authorization_server.domain.model.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class AuthUserManagementApplicationService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("@securityCheck.canRegisterUserOfType(#input.type, #root)")
     public AuthUserOutput create(final AuthUserInput input) {
         if (this.authUserRepository.existsByEmail(input.email())) {
             throw new AuthUserEmailAlreadyInUseException(input.email());
